@@ -10,8 +10,13 @@ sum = nse_stock_count / 5
 
 x =  list(all_nse_stocks.items())[:30]
 
+<<<<<<< HEAD
 print(type(all_nse_stocks))
 
+=======
+# print(all_nse_stocks)
+# Test_GitHub
+>>>>>>> c49f7b7f5f590cefac677a15937792e91c40e101
 
 # for stock_symbol in all_nse_stocks:
 #     print(f" the stock symbol is {stock_symbol} and the company is {stock_symbol[:]}")
