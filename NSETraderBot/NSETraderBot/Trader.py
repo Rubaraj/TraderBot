@@ -1,25 +1,35 @@
 from NSETraderBot import Helper
 
-
 nseHelper = Helper.NSEHelper()
 
+
 all_nse_stocks = nseHelper.getallNSEStockName()
-nse_stock_count = len(all_nse_stocks)
+all_nse_stocks = list(all_nse_stocks.items())
+all_nse_stocks.pop(0)
 
-sum = nse_stock_count / 5
+start_count = 0
+per_thrd_count = int(len(all_nse_stocks) / 5)
+end_count = per_thrd_count
 
-x =  list(all_nse_stocks.items())[:30]
 
-<<<<<<< HEAD
-print(type(all_nse_stocks))
+v = all_nse_stocks[start_count:end_count]
+start_count = end_count
+end_count += per_thrd_count
+w = all_nse_stocks[start_count:end_count]
+start_count = end_count
+end_count += per_thrd_count
+x = all_nse_stocks[start_count:end_count]
+start_count = end_count
+end_count += per_thrd_count
+y = all_nse_stocks[start_count:end_count]
+start_count = end_count
+z = all_nse_stocks[start_count:]
 
-=======
-# print(all_nse_stocks)
-# Test_GitHub
->>>>>>> c49f7b7f5f590cefac677a15937792e91c40e101
 
-# for stock_symbol in all_nse_stocks:
-#     print(f" the stock symbol is {stock_symbol} and the company is {stock_symbol[:]}")
-#     if stock_symbol.upper() != "SYMBOL":
-#         print(stock_symbol)
-#         print(nseHelper.get_stock_detail(stock_symbol.upper()))
+
+
+for stock_symbol in all_nse_stocks:
+    print(f" the stock symbol is {stock_symbol} and the company is {stock_symbol[:]}")
+    if stock_symbol.upper() != "SYMBOL":
+        print(stock_symbol)
+        print(nseHelper.get_stock_detail(stock_symbol.upper()))
