@@ -2,7 +2,7 @@ from http.cookiejar import CookieJar
 from urllib.request import build_opener, HTTPCookieProcessor
 import six
 import json
-import re
+
 
 class TraderUtility:
 
@@ -20,6 +20,7 @@ class TraderUtility:
         cj = CookieJar()
         return build_opener(HTTPCookieProcessor(cj))
 
+
     def byte_adaptor(self, fbuffer):
         strings = fbuffer.read().decode('latin-1')
         fbuffer = six.StringIO(strings)
@@ -31,4 +32,3 @@ class TraderUtility:
             return json.dumps(data)
         else:
             return data
-

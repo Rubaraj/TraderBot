@@ -27,11 +27,10 @@ class NSEHelper:
             res = nse_Utility.byte_adaptor(res)
             for line in res.read().split('\n'):
                 if line != '' and re.search(',', line):
-                    (code, name) = line.split(',')[0:2]
+                    [code, name] = line.split(',')[0:2]
                     res_dict[code] = name
         else:
             raise Exception('no response received')
-
         return nse_Utility.render_response(res_dict, as_json=False)
 
     def build_url_for_quote(self, symbol):
@@ -65,17 +64,20 @@ class NSEHelper:
 
 
     def get_stock_detail(self, symbol):
-        url = self.build_url_for_quote(symbol)
-        req = Request(url, None, headers)
-        res = opener.open(req)
-        res = nse_Utility.byte_adaptor(res)
-        res = res.read()
-        match = re.search( \
-            r'<div\s+id="responseDiv"\s+style="display:none">(.*?)</div>',
-            res, re.S
-        )
-        print(type(match))
-        buffer = match.group(1).strip()
-        print(buffer)
-        response = self.clean_server_response(json.loads(buffer)['data'][0])
-        return nse_Utility.render_response(response, as_json=False)
+        try:
+            url = self.build_url_for_quote(symbol)
+            req = Request(url, None, headers)
+            res = opener.open(req)
+            res = nse_Utility.byte_adaptor(res)
+            res = res.read()
+            match = re.search( \
+                r'<div\s+id="responseDiv"\s+style="display:none">(.*?)</div>',
+                res, re.S
+            )
+            buffer = match.group(1).strip()
+            response = self.clean_server_response(json.loads(buffer)['data'][0])
+            return nse_Utility.render_response(response, as_json=False)
+        except IndexError:
+            print("Data Not Found Index Error")
+        except:
+            print("Un Known Exception")
