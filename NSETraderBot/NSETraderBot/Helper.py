@@ -36,7 +36,6 @@ class NSEHelper:
     def build_url_for_quote(self, symbol):
         if symbol is not None and type(symbol) is str:
             encoded_args = urlencode([('symbol', symbol), ('illiquid', '0'), ('smeFlag', '0'), ('itpFlag', '0')])
-            print(nse_URLs.getparticularstockdetails + encoded_args)
             return nse_URLs.getparticularstockdetails + encoded_args
         else:
             raise Exception('code must be string')
