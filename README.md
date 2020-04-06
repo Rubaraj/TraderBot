@@ -1,4 +1,4 @@
 # TraderBot
-Automatic Trader Online
+Automatic Trader
 
-The bot will be used to trade NSE Equity
+The bot will Trade indian NSE and BSE Equity online
