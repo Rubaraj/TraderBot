@@ -4,10 +4,10 @@ import json, re, six
 from urllib.parse import urlencode
 
 # Created Libraries
-from NSETraderBot import NSEURLs, Utility
+from NSETraderBot import ConstURLList, Utility
 
 # Class Initialization
-nse_URLs = NSEURLs.NSEURLList()
+nse_URLs = ConstURLList.NSEURLList()
 nse_Utility = Utility.TraderUtility()
 
 # Predefined Methods

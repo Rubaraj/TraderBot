@@ -1,33 +1,40 @@
 from bs4 import BeautifulSoup
+from NSETraderBot import ConstURLList
 import requests
 
-source = requests.get('https://www.moneycontrol.com/india/stockpricequote/').text
 
-soup = BeautifulSoup(source,'lxml')
+moneycontrolURl = ConstURLList.MoneyControlURLList()
 
-# stocklist_table = soup.find('table',class_='pcq_tbl MT10')
-# print(stocklist_table.prettify())
 
-stocklist_table = soup.find('table',class_='pcq_tbl MT10')
-
-for stocklinktr in stocklist_table.find_all('tr'):
-    stocklistlinktd = None
-    stocklistcpyname = None
+def getallequityURL():
+    rtnstockdetailslist = {}
     try:
-        for stocklisttd in stocklinktr.find_all('td'):
+        source = requests.get(moneycontrolURl.getallStockURL).text
+        soup = BeautifulSoup(source, 'lxml')
+        stocklist_table = soup.find('table', class_='pcq_tbl MT10')
+        for stocklinktr in stocklist_table.find_all('tr'):
+            stocklistlinktd = None
+            stocklistcpyname = None
             try:
-                stocklistlinktd = stocklisttd.a['href']
-                stocklistcpyname = stocklisttd.a['title']
+                for stocklisttd in stocklinktr.find_all('td'):
+                    try:
+                        stocklistlinktd = stocklisttd.a['href']
+                        stocklistcpyname = stocklisttd.a['title']
+                    except:
+                        stocklistlinktd = None
+                        stocklistcpyname = None
+                    rtnstockdetailslist.update({stocklistcpyname:stocklistlinktd})
             except:
                 stocklistlinktd = None
                 stocklistcpyname = None
-            print(stocklistlinktd, stocklistcpyname)
+    except requests.exceptions.ConnectionError:
+        print("Unable to connect the URL")
+        rtnstockdetailslist = None
     except:
-        stocklistlinktd = None
-        stocklistcpyname = None
+        print("Unknown Error in getallequityURL()")
+    if rtnstockdetailslist != None:
+        del rtnstockdetailslist['']
+    return rtnstockdetailslist
 
-
-# print(stocklinktr.prettify())
-
-# print(soup.prettify())
-
+testlist = getallequityURL()
+print(testlist)
