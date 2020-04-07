@@ -7,7 +7,7 @@ moneycontrolURl = ConstURLList.MoneyControlURLList()
 
 
 def getallequityURL():
-    rtnstockdetailslist = {}
+    rtnstockdetailslist = []
     try:
         source = requests.get(moneycontrolURl.getallStockURL).text
         soup = BeautifulSoup(source, 'lxml')
@@ -23,7 +23,7 @@ def getallequityURL():
                     except:
                         stocklistlinktd = None
                         stocklistcpyname = None
-                    rtnstockdetailslist.update({stocklistcpyname:stocklistlinktd})
+                    rtnstockdetailslist.append([stocklistlinktd,stocklistcpyname])
             except:
                 stocklistlinktd = None
                 stocklistcpyname = None
@@ -32,9 +32,11 @@ def getallequityURL():
         rtnstockdetailslist = None
     except:
         print("Unknown Error in getallequityURL()")
-    if rtnstockdetailslist != None:
-        del rtnstockdetailslist['']
+    # if rtnstockdetailslist != None:
+    #     del rtnstockdetailslist['']
     return rtnstockdetailslist
 
 testlist = getallequityURL()
-print(testlist)
+for test in testlist:
+    print(test)
+    print(testlist[test])
