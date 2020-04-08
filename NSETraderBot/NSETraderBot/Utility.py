@@ -1,7 +1,6 @@
 from http.cookiejar import CookieJar
 from urllib.request import build_opener, HTTPCookieProcessor
-import six
-import json
+import six, json, re
 
 
 class TraderUtility:
@@ -32,3 +31,23 @@ class TraderUtility:
             return json.dumps(data)
         else:
             return data
+
+
+    def clean_server_response(self, resp_dict):
+        d = {}
+        for key, value in resp_dict.items():
+            d[str(key)] = value
+        resp_dict = d
+        for key, value in resp_dict.items():
+            if type(value) is str or isinstance(value, six.string_types):
+                if re.match('-', value):
+                    try:
+                        if float(value) or int(value):
+                            dataType = True
+                    except ValueError:
+                        resp_dict[key] = None
+                elif re.search(r'^[0-9,.]+$', value):
+                    resp_dict[key] = float(re.sub(',', '', value))
+                else:
+                    resp_dict[key] = str(value)
+        return resp_dict
