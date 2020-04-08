@@ -2,7 +2,6 @@ from bs4 import BeautifulSoup
 from NSETraderBot import ConstURLList
 import requests
 
-
 moneycontrolURl = ConstURLList.MoneyControlURLList()
 
 
@@ -23,7 +22,7 @@ def getallequityURL():
                     except:
                         stocklistlinktd = None
                         stocklistcpyname = None
-                    rtnstockdetailslist.append([stocklistlinktd,stocklistcpyname])
+                    rtnstockdetailslist.append([stocklistlinktd, stocklistcpyname])
             except:
                 stocklistlinktd = None
                 stocklistcpyname = None
@@ -32,11 +31,17 @@ def getallequityURL():
         rtnstockdetailslist = None
     except:
         print("Unknown Error in getallequityURL()")
-    # if rtnstockdetailslist != None:
-    #     del rtnstockdetailslist['']
     return rtnstockdetailslist
 
-testlist = getallequityURL()
-for test in testlist:
-    print(test)
-    print(testlist[test])
+
+def get_stock_detail(arg_stock_type, arg_stock_symbol):
+    try:
+        if arg_stock_type.upper() == "BSE":
+            res = requests.get(moneycontrolURl.getbseStockdetails + arg_stock_symbol, timeout=3)
+        elif arg_stock_type.upper() == "NSE":
+            res = requests.get(moneycontrolURl.getnseStockdetails + arg_stock_symbol, timeout=3)
+        rtnstockdetails = res.json()
+    except Exception as ex:
+        print("Unkown Error : " + str(ex))
+        rtnstockdetails = None
+    return rtnstockdetails
