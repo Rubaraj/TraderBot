@@ -1,7 +1,9 @@
 from http.cookiejar import CookieJar
 from urllib.request import build_opener, HTTPCookieProcessor
-import six, json, re
-
+from email.message import EmailMessage
+from NSETraderBot import ConstURLList
+import six, json, re, smtplib, os, imghdr
+generalurls = ConstURLList.GeneralURLList()
 
 class TraderUtility:
 
@@ -51,3 +53,47 @@ class TraderUtility:
                 else:
                     resp_dict[key] = str(value)
         return resp_dict
+
+class GeneralUtility:
+
+    def sendmailutility(self,argSendToLst,argSubject,argHTMLContent,argattachmentfiles,argMailType):
+        rtnmailsent = False
+
+        EMAIL_ADDRESS = os.environ.get('EMAIL_USER')
+        EMAIL_PASSWORD = os.environ.get('EMAIL_PASS')
+        image_type = ['JPEG','JPG','PNG','GIF','TIFF','PSD','PDF','RAW']
+        pdf_type = ['PDF']
+        smtp_url = generalurls.getGmailSMTP
+
+        #Todo Need to add a switch like statement to identify the type of mail send from for SMTP -- (argMailType)
+        #Todo Need to configure for different_type(gmail,outlook all at once) of send email addresses for SMTP
+
+        mail_message = EmailMessage()
+        mail_message['From'] = EMAIL_ADDRESS
+        mail_message['Subject'] = argSubject
+
+        if not isinstance(argSendToLst, list):
+            raise TypeError("argument argSendToLst/ To should be a list")
+        mail_message['To'] = argSendToLst
+
+        if argHTMLContent != None:
+            mail_message.set_content("This is a plain text email")
+            mail_message.add_alternative(argHTMLContent,subtype='html')
+
+        if argattachmentfiles != None:
+            for file in argattachmentfiles:
+                with open(file,'rb') as file_obj:
+                    file_data=file_obj.read()
+                    file_name= file_obj.name
+                    if image_type.contains(imghdr.what(file_obj.name).upper()):
+                        file_type = imghdr.what(file_obj.name)
+                        mail_message.add_attachment(file_data,maintype='',subtype=file_type,filename=file_name)
+
+                    #TODO Need to add PDF file segregation for attachment
+                    #TODO Need to find the file extension
+                    #TODO Need to add the  if statement
+
+        with smtplib.SMTP_SSL(smtp_url, 465) as smtp_obj:
+            smtp_obj.login(EMAIL_ADDRESS,EMAIL_PASSWORD)
+            smtp_obj.send_message(mail_message)
+

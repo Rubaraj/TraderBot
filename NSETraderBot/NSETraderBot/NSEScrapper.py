@@ -3,7 +3,7 @@
 from NSETraderBot import Helper, Utility, ConstURLList
 from urllib.request import Request
 from urllib.parse import urlencode
-import _thread,re,json
+import _thread,re,json, requests
 
 nse_URLs = ConstURLList.NSEURLList()
 nse_Utility = Utility.TraderUtility()
@@ -73,3 +73,15 @@ class NSEStockSite:
             print("Data Not Found Index Error")
         except:
             print("Un Known Exception")
+
+
+
+    def getnify50Stock(self):
+        try:
+            url = nse_URLs.getnsenifty50stock
+            headers ={'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:75.0) Gecko/20100101 Firefox/75.0'}
+            res = requests.get(url,headers=headers,timeout=5)
+        except Exception as ex:
+            print(f"UnKnown Exception in getnify50stock Exception ( {ex} )")
+            return None
+        return res.json()
