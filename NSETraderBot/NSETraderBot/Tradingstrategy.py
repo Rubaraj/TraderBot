@@ -18,7 +18,7 @@ class OpenHighOpenLow:
         <!DOCTYPE html> <html> <head> 
         <style> table, th, td {   border: 1px solid black; border-collapse: collapse; } th, td {   padding: 5px;   text-align: left; } th {background-color: #4CAF50;color: white;}</style>
         </head> <body> <h2>Eligible list of Open High and Open Low</h2>
-        <table style="width:100%"> <tr> <th>SYMBOL</th> <th>OPEN</th> <th>HIGH</th> <th>LOW</th> <th>BUY/SELL</th> </tr>"""
+        <table style="width:100%"> <tr> <th>SYMBOL</th> <th> LAST TRADED PRICE </tr> <th>OPEN</th> <th>HIGH</th> <th>LOW</th> <th>BUY/SELL</th>"""
 
         noteligiblecound = 0
         eligibletobuy = 0
@@ -29,6 +29,7 @@ class OpenHighOpenLow:
 
                 mail_htmlcontent += f"""<tr>
                 <td>{value['symbol']}</td>
+                <td>{value['ltP']}</td>
                 <td>{value['open']}</td>
                 <td>{value['high']}</td>
                 <td>{value['low']}</td>"""
