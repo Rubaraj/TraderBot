@@ -3,7 +3,8 @@
 from NSETraderBot import Helper, Utility, ConstURLList
 from urllib.request import Request
 from urllib.parse import urlencode
-import _thread,re,json, requests
+from bs4 import BeautifulSoup
+import _thread,re,json, requests, os
 
 nse_URLs = ConstURLList.NSEURLList()
 nse_Utility = Utility.TraderUtility()
@@ -47,6 +48,7 @@ class NSEStockSite:
         while 1:
             pass
 
+
     def build_url_for_quote(self, argstocksymbol):
         if argstocksymbol is not None and type(argstocksymbol) is str:
             encoded_args = urlencode([('symbol', argstocksymbol), ('illiquid', '0'), ('smeFlag', '0'), ('itpFlag', '0')])
@@ -75,7 +77,6 @@ class NSEStockSite:
             print("Un Known Exception")
 
 
-
     def getnify50Stock(self):
         try:
             url = nse_URLs.getnsenifty50stock
@@ -85,3 +86,15 @@ class NSEStockSite:
             print(f"UnKnown Exception in getnify50stock Exception ( {ex} )")
             return None
         return res.json()
+
+
+    def getOtherInformationNSEDerivative(self,argstocksymbol):
+        payload = f"?underlying={argstocksymbol}&instrument=FUTSTK&type=-&strike=-&expiry=30APR2020"
+        url = nse_URLs.getnsederivativedetail + payload
+        headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:75.0) Gecko/20100101 Firefox/75.0'}
+        source_code = requests.get(url, headers=headers).text
+        soup = BeautifulSoup(source_code, 'lxml')
+        other_information_div = soup.find('div', id='responseDiv').text
+        other_information = os.linesep.join([s for s in other_information_div.splitlines() if s])
+        rtninfo = json.loads(other_information)
+        return rtninfo['data']
