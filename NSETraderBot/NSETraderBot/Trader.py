@@ -1,7 +1,9 @@
 from NSETraderBot import MoneyControlScrapper,Helper,Tradingstrategy,Utility,NSEScrapper
 
 tradingstrategy= Tradingstrategy.OpenHighOpenLow()
+nsescra = NSEScrapper.NSEStockSite()
 
+# nsescra.getOtherInformationNSEDerivative('CIPLA')
 # nify50_json_obj = tradingstrategy.getopenhighopenlow()
 
 # print(nify50_json_obj)
