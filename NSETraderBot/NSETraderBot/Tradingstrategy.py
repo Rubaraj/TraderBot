@@ -31,7 +31,9 @@ class OpenHighOpenLow:
                 if value['open'] == value['high'] or value['open'] == value['low']:
                     stockderivativedetail = nseData.getOtherInformationNSEDerivative(value['symbol'])[0];
                     stock_open = value['open'].replace(',','')
-                    volatilitycal = (float(stockderivativedetail['dailyVolatility']) / 100) * float(stock_open)
+                    volatilitycal = 0.00
+                    if stockderivativedetail != None:
+                        volatilitycal = (float(stockderivativedetail['dailyVolatility']) / 100) * float(stock_open)
                     mail_htmlcontent += f"""<tr>
                     <td>{value['symbol']}</td>
                     <td>{value['ltP']}</td>
